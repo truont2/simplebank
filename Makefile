@@ -12,6 +12,10 @@ dropdb:
 # use to migrate databases
 # migrate -path db/migration -database "postgresql://root:secret@localhost:5433/simple_bank?sslmode=disable" -verbose up
 
+# command to run docker migrate setup run in cmd
+# docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc init
+# docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
+
 migrateup:
 	migrate -path db/migration -database "$(DB_URL)" -verbose up
 
