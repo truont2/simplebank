@@ -98,6 +98,7 @@ func TestDeleteAccount(t *testing.T) {
 
 func TestListAccounts(t *testing.T) {
 	var lastAccount Account
+	// create 10 accounts
 	for i := 0; i < 10; i++ {
 		lastAccount = createRandomAccount(t)
 	}
