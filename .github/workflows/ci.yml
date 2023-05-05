@@ -27,6 +27,8 @@ jobs:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: secret
         ports:
+        # need to specify and expose the port mapping that we are using for the application
+        # expose the 5433 port that connects to the 5432 port of the docker container
           - 5433:5432
         # Set health checks to wait until postgres has started
         options: >-
