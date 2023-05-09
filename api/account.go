@@ -8,13 +8,13 @@ import (
 	db "github.com/truont2/simplebank/db/sqlc"
 )
 
-type createAccounRequest struct {
+type createAccountRequest struct {
 	Owner    string `json:"owner" binding:"required"`
 	Currency string `json:"currency" binding:"required,oneof=USD EUR"`
 }
 
 func (server *Server) createAccount(ctx *gin.Context) {
-	var req createAccounRequest
+	var req createAccountRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
@@ -87,4 +87,33 @@ func (server *Server) listAccounts(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, accounts)
+}
+
+type updateAccountRequest struct {
+	ID      int64 `json:"id"`
+	Balance int64 `json:"balance"`
+}
+
+func (server *Server) updateAccount(ctx *gin.Context) {
+	var req updateAccountRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	arg := db.UpdateAccountParams{
+		ID:      req.ID,
+		Balance: req.Balance,
+	}
+
+	account, err := server.store.UpdateAccount(ctx, arg)
+	if err != nil {
+		// if error is not nil and the data is not updated, must be some internal server error
+		ctx.JSON(http.StatusInternalServerError, arg)
+		return
+	}
+
+	// if no error
+	ctx.JSON(http.StatusOK, account)
+
 }

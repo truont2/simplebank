@@ -7,21 +7,21 @@ import (
 	"testing"
 
 	_ "github.com/lib/pq"
+	"github.com/truont2/simplebank/util"
 )
 
 var testQueries *Queries
 var testDB *sql.DB
 
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:secret@localhost:5433/simple_bank?sslmode=disable"
-)
-
 // main entry point of all unit tests
 func TestMain(m *testing.M) {
-	var err error
+	config, err := util.LoadConfig("../..")
 
-	testDB, err = sql.Open(dbDriver, dbSource)
+	if err != nil {
+		log.Fatal("Cannot load config:", err)
+	}
+
+	testDB, err = sql.Open(config.DBDriver, config.DbSource)
 
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)

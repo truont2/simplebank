@@ -7,13 +7,14 @@ import (
 )
 
 // Server serves HTTP requrest for our banking service
+// struct pointer needs *, with interface you do not need the star
 type Server struct {
-	store  *db.Store
+	store  db.Store
 	router *gin.Engine
 }
 
 // NewServer create a new HTTP server and setup routing
-func NewServer(store *db.Store) *Server {
+func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
@@ -21,6 +22,7 @@ func NewServer(store *db.Store) *Server {
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccounts)
+	router.PUT("/accounts", server.updateAccount)
 
 	server.router = router
 	return server
