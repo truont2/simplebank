@@ -91,6 +91,7 @@ func (store *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (Tr
 			AccountID: arg.ToAccountID,
 			Amount:    arg.Amount,
 		})
+
 		if err != nil {
 			return err
 		}
@@ -106,7 +107,7 @@ func (store *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (Tr
 			result.ToAccount, result.FromAccount, err = addMoney(ctx, q, arg.ToAccountID, arg.Amount, arg.FromAccountID, -arg.Amount)
 		}
 
-		return nil
+		return err
 	})
 
 	return result, err
